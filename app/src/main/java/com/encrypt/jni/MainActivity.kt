@@ -18,6 +18,11 @@ class MainActivity : AppCompatActivity() {
         Log.v("XPC","encode="+output)
         Log.v("XPC","decrypt="+decrypt(output))
 
+
+        var outputBase = encryptBase64("2222222222","abcdef");
+        Log.v("XPC","encryptBase64="+outputBase)
+        Log.v("XPC","decryptBase64="+decryptBase64(outputBase,"abcdef"))
+
     }
 
     /**
@@ -27,6 +32,10 @@ class MainActivity : AppCompatActivity() {
     external fun stringFromJNI(): String
     external fun encrypt(input:String): String
     external fun decrypt(input:String): String
+
+
+    external fun decryptBase64(input:String,key:String): String
+    external fun encryptBase64(input:String,key:String): String
 
     companion object {
 

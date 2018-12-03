@@ -1,6 +1,8 @@
 #include <jni.h>
 #include <string>
 #include "aes/aes_jni.h"
+#include "base64/encrypt.h"
+
 extern "C" JNIEXPORT jstring
 
 JNICALL
@@ -46,4 +48,35 @@ Java_com_encrypt_jni_MainActivity_decrypt(
     env->ReleaseStringUTFChars(str_, str);
 
     return env->NewStringUTF(s.c_str());
+}
+
+
+extern "C" JNIEXPORT jstring
+
+JNICALL
+Java_com_encrypt_jni_MainActivity_encryptBase64(
+        JNIEnv *env,
+        jobject /* this */,jstring str_,jstring key_) {
+    const char *cPassword = env->GetStringUTFChars(str_, 0);
+    const char *cKey = env->GetStringUTFChars(key_, 0);
+    std::string jpassword = std::string(cPassword);
+    std::string jKey = std::string(cKey);
+    std::string output = encrypt(jpassword,jKey);
+    return env->NewStringUTF(output.c_str());
+}
+
+
+
+extern "C" JNIEXPORT jstring
+
+JNICALL
+Java_com_encrypt_jni_MainActivity_decryptBase64(
+        JNIEnv *env,
+        jobject /* this */,jstring str_,jstring key_) {
+    const char *cEncode = env->GetStringUTFChars(str_, 0);
+    std::string sEncode = std::string(cEncode);
+    const char *ckey = env->GetStringUTFChars(key_, 0);
+    std::string keyStr = std::string(ckey);
+    std::string output = decrypt(sEncode,keyStr );
+    return env->NewStringUTF(output.c_str());
 }
